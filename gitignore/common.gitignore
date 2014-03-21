@@ -1,0 +1,28 @@
+# SQL Backup Files #
+#######################
+*.sql
+
+# Exclude packages #
+####################
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# OS generated files #
+######################
+.DS_Store
+*.DS_Store
+.DS_Store?
+*.lock
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.out

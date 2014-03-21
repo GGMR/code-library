@@ -1,4 +1,4 @@
-front-end-code-library
+Front-end Code Library
 ======================
 
-Code library with templates and commonly used plugins etc
+Common gitignore, htaccess and other generic, re-usable code templates

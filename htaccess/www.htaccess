@@ -1,0 +1,4 @@
+# Redirect all users to access the site WITHOUT the www. prefix
+RewriteEngine on
+RewriteCond %{http_host} ^www.DOMAIN.EXT [nc]
+RewriteRule ^(.*)$ http://DOMAIN.EXT/$1 [r=301,nc]

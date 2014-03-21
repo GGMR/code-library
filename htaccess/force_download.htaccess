@@ -1,0 +1,7 @@
+# Force all PDF files to download
+# Requires Apache Header Module - this will work for any file extensions
+
+<FilesMatch "\.(?i:pdf)$">
+  ForceType application/octet-stream
+  Header set Content-Disposition attachment
+</FilesMatch>
