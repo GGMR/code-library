@@ -1,5 +1,6 @@
 # IDE Files #
 ######################
+nbproject/*
 
 # PHPStorm #
 .idea/*
