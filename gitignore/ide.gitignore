@@ -4,3 +4,7 @@ nbproject/*
 
 # PHPStorm #
 .idea/*
+
+# Sublime Text #
+*.sublime-workspace
+*.sublime-project
