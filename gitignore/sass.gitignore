@@ -1,0 +1,17 @@
+*.gem
+.sass-cache
+bootstrap.css
+bootstrap-responsive.css
+Gemfile.lock
+.rvmrc
+.rbenv-version
+node_modules
+/css/main.css
+
+# Ignore bundler config
+/.bundle
+/vendor/cache
+/vendor/bundle
+tmp/
+test/screenshots/
+test/dummy/log/*.log
