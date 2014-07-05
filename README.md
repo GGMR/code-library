@@ -1,4 +1,3 @@
-Front-end Code Library
-======================
-
-Common gitignore, htaccess and other generic, re-usable code templates
+## General Code Library
+Commonly used code, samples, scripts etc.
+Everything that is re-usable, but has no other home :)
