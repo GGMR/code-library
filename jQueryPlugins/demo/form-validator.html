@@ -7,10 +7,10 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--<link rel="stylesheet" href="css/styles.css">-->
+    <link rel="stylesheet" href="../../assets/normalize.css">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../jQueryPlugins/jquery-1.11.1.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="../../assets/jquery-1.11.1.min.js"><\/script>')</script>
 
     <style type="text/css">
         body{
@@ -19,9 +19,26 @@
             color: #333;
             background-color: #eee;
         }
+        .page{
+	        width: 100%;
+	        max-width: 800px;
+	        margin: 0 auto;
+        }
         .hidden{
             display: none;
         }
+	    .form-error{
+		    color: red;
+	    }
+	    .form-has-error label{
+		    color: red;
+	    }
+	    .form-has-error input,
+	    .form-has-error select,
+	    .form-has-error textarea{
+		    outline: 1px solid red;
+		    color: red;
+	    }
     </style>
 
 </head>
@@ -31,11 +48,64 @@
     <p class="browsehappy">You are using an <strong>poo</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <h1>Form Validator Demo</h1>
+    <section class="page">
 
+        <h1>Form Validator Demo</h1>
 
+	    <h2>Default validator options</h2>
+		<form id="form_test" action="" method="post" autocomplete="off">
+			<fieldset class="form-control-group">
+				<label for="test_name">Name:</label>
+				<input type="text" id="test_name" name="test_name" required />
+			</fieldset>
+			<fieldset class="form-control-group">
+				<label for="test_email">Email:</label>
+				<input type="email" id="test_email" name="test_email" required />
+			</fieldset>
+			<fieldset class="form-control-group">
+				<label for="test_tel">Telephone:</label>
+				<input type="tel" id="test_tel" name="test_tel" required />
+			</fieldset>
+			<fieldset class="form-control-group">
+				<label for="test_address">Address:</label>
+				<textarea id="test_address" name="test_address" required></textarea>
+			</fieldset>
+			<fieldset class="form-control-group">
+				<label for="test_title">Name:</label>
+				<select id="test_title" name="test_title" required>
+					<option value="">&nbsp;</option>
+					<option value="mr">Mr</option>
+					<option value="mrs">Mrs</option>
+				</select>
+			</fieldset>
+			<fieldset class="form-control-group">
+				<label>Gender:</label><br />
+				<label for="test_gender_male">Male</label>
+				<input type="radio" id="test_gender_male" name="test_gender" required />
+				<label for="test_gender_female">Female</label>
+				<input type="radio" id="test_gender_female" name="test_gender" required />
+			</fieldset>
+			<fieldset class="form-control-group">
+				<label>
+					Marketing?
+					<input type="checkbox" id="test_marketing" name="test_marketing" required />
+				</label>
+			</fieldset>
+			<hr />
+			<button type="submit">Submit</button>
+		</form>
+
+	</section>
 
     <script src="../jquery.ggmr.form.validator.js"></script>
+	<script>
+		$(function() {
+
+			// Enhance form with validator using all the default options
+			$('#form_test').ggFormValidator();
+
+		});
+	</script>
 
 </body>
 </html>
