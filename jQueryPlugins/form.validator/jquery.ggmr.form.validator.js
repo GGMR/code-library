@@ -1,7 +1,15 @@
 /**
- * jQuery plugin. Form validator.
+ * jQuery plugin. Basic form validator.
  *
  * @author Barry Jones <barry.jones@ggmr.co.uk>
+ *     02/09/2014 - Created basic validator - required fields only.
+ *     02/09/2014 - Added basic email and tel number formats based on regex validation.
+ *     02/09/2014 - Added custom regex pattern validation. - NOTE: DONT use regex's with backslashes in!
+ */
+/**
+ * This plug-in is designed to be framework-independent.
+ * It removes native html5 validation to keep a consistent interface.
+ * To configure for a given framework, simply override the classes and selectors used.
  */
 ;
 (function($) {
@@ -15,8 +23,11 @@
         var _settings = $.extend({
             Debug: true,
             WidgetClass: 'enhanced-form',
-            ValidationNodeClass: 'form-validation-message row hidden',
-            ValidationNodeMessage: 'Please ensure all required fields are filled in.'
+            ValidationNodeClass: 'form-validation-message hidden',
+            ValidationSubNodeClass: 'form-error',
+            ValidationNodeMessage: 'Please ensure all required fields are filled in.',
+	        ValidationControlHasErrorClass: 'form-has-error',
+	        ControlGroupSelector: '.form-control-group'
         }, options || {});
 
         // Local vars
@@ -24,7 +35,7 @@
         var _id = null;
         var _validation_node = null;
         var _regexp = {
-            telephone: /^0{1}[1-9]{7,20}$/,
+            tel: /^0{1}[1-9]{7,20}$/,
             email: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
         };
 
@@ -54,7 +65,8 @@
             _validation_node = $('<div/>')
                 .addClass(_settings.ValidationNodeClass);
             _validation_node.append(
-                $('<div/>').addClass('col-xs-12 text-center text-danger').html(_settings.ValidationNodeMessage).prepend($('<span/>').addClass('glyphicon glyphicon-exclamation-sign'))
+                $('<div/>').addClass(_settings.ValidationSubNodeClass)
+                    .html(_settings.ValidationNodeMessage)
             );
             _node.prepend(_validation_node);
 
@@ -93,7 +105,8 @@
         // Highlight validation errors
         var _highlightValidationErrors = function(failed_fields) {
             $.each(failed_fields, function() {
-                $('#' + this).parents('.form-group:first').addClass('has-error');
+                $('#' + this).parents(_settings.ControlGroupSelector)
+	                .addClass(_settings.ValidationControlHasErrorClass);
             });
             return this;
         }.bind(this);
@@ -105,7 +118,7 @@
             var _failed_fields = new Array();
             $requireds.each(function() {
                 var $this = $(this);
-                var fieldType = $this.attr('data-field-type');
+                var fieldType = $this.attr('type');
 
                 // if a valid regexp is found then validates against that
                 if (_regexp[fieldType]) {
@@ -115,8 +128,9 @@
                 } else {
                     // Generic non-specific validation
                     if ($this.is(':checkbox') && !$this.is(':checked')) {
-                        // Deals with checkboxes
                         _failed_fields.push($this.attr('id'));
+                    } else if ($this.is(':radio') && ($('input[name="' + $this.attr('name') + '"]:checked').length == 0) ) {
+	                    _failed_fields.push($this.attr('id'));
                     } else if (!$this.val() || ($this.val().length == 0)) {
                         // Deals with text boxes
                         _failed_fields.push($this.attr('id'));
@@ -126,6 +140,24 @@
             return _failed_fields;
 
         }.bind(this);
+
+	    // Validate regex fields
+	    var _validateRegExFields = function($regexs) {
+
+		    // Iterate required fields and check for a value
+		    var _failed_fields = new Array();
+		    $regexs.each(function() {
+			    var $this = $(this);
+			    var pattern = $this.attr('pattern');
+			    var reg = new RegExp(pattern);
+			    if (!reg.test($this.val())) {
+				    _failed_fields.push($this.attr('id'));
+			    }
+
+		    });
+		    return _failed_fields;
+
+	    }.bind(this);
 
         /* Public */
 
@@ -137,16 +169,25 @@
         // Validate the form. Return array of failed fields
         this.validateForm = function() {
 
-            // Validate required fields
-            var _failed_fields = new Array();
-            var $requireds = $('[required]', _node);
-            _failed_fields = _validateRequiredFields($requireds);
+	        try {
 
-            //
+		        // Validate required fields
+		        var _failed_fields = new Array();
+		        var $requireds = $('[required]', _node);
+		        _failed_fields = _validateRequiredFields($requireds);
 
-            // Return failed fields
-            return _failed_fields
-            //
+		        // Validate regexs
+		        var $regexs = $('[pattern]', _node);
+		        _failed_fields = $.merge(_failed_fields, _validateRegExFields($regexs));
+
+		        // Return failed fields
+		        return _failed_fields;
+
+	        } catch (e) {
+		        console.log('Error in form.validator plug-in: ' + e.message);
+		        return _failed_fields;
+	        }
+
 
         }
 
@@ -157,7 +198,8 @@
             } else {
                 _validation_node.addClass('hidden');
                 $(':input', _node).each(function() {
-                    $(this).parents('.form-group:first').removeClass('has-error');
+                    $(this).parents(_settings.ControlGroupSelector)
+	                    .removeClass(_settings.ValidationControlHasErrorClass);
                 });
             }
             return this;
