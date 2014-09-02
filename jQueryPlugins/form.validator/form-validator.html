@@ -67,6 +67,10 @@
 				<input type="tel" id="test_tel" name="test_tel" required />
 			</fieldset>
 			<fieldset class="form-control-group">
+				<label for="test_digits">Digits (Regex):</label>
+				<input type="text" id="test_digits" name="test_digits" required pattern="^[0-9]+$" />
+			</fieldset>
+			<fieldset class="form-control-group">
 				<label for="test_address">Address:</label>
 				<textarea id="test_address" name="test_address" required></textarea>
 			</fieldset>
@@ -97,7 +101,7 @@
 
 	</section>
 
-    <script src="../jquery.ggmr.form.validator.js"></script>
+    <script src="jquery.ggmr.form.validator.js"></script>
 	<script>
 		$(function() {
 

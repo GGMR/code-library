@@ -4,6 +4,7 @@
  * @author Barry Jones <barry.jones@ggmr.co.uk>
  *     02/09/2014 - Created basic validator - required fields only.
  *     02/09/2014 - Added basic email and tel number formats based on regex validation.
+ *     02/09/2014 - Added custom regex pattern validation. - NOTE: DONT use regex's with backslashes in!
  */
 /**
  * This plug-in is designed to be framework-independent.
@@ -140,6 +141,24 @@
 
         }.bind(this);
 
+	    // Validate regex fields
+	    var _validateRegExFields = function($regexs) {
+
+		    // Iterate required fields and check for a value
+		    var _failed_fields = new Array();
+		    $regexs.each(function() {
+			    var $this = $(this);
+			    var pattern = $this.attr('pattern');
+			    var reg = new RegExp(pattern);
+			    if (!reg.test($this.val())) {
+				    _failed_fields.push($this.attr('id'));
+			    }
+
+		    });
+		    return _failed_fields;
+
+	    }.bind(this);
+
         /* Public */
 
         // Get the element for this instance
@@ -150,16 +169,25 @@
         // Validate the form. Return array of failed fields
         this.validateForm = function() {
 
-            // Validate required fields
-            var _failed_fields = new Array();
-            var $requireds = $('[required]', _node);
-            _failed_fields = _validateRequiredFields($requireds);
+	        try {
 
-            //
+		        // Validate required fields
+		        var _failed_fields = new Array();
+		        var $requireds = $('[required]', _node);
+		        _failed_fields = _validateRequiredFields($requireds);
 
-            // Return failed fields
-            return _failed_fields
-            //
+		        // Validate regexs
+		        var $regexs = $('[pattern]', _node);
+		        _failed_fields = $.merge(_failed_fields, _validateRegExFields($regexs));
+
+		        // Return failed fields
+		        return _failed_fields;
+
+	        } catch (e) {
+		        console.log('Error in form.validator plug-in: ' + e.message);
+		        return _failed_fields;
+	        }
+
 
         }
 
