@@ -3,6 +3,9 @@
  *
  * @author Barry Jones <barry.jones@ggmr.co.uk>
  */
+/**
+ *
+ */
 ;
 (function($) {
 
@@ -15,7 +18,7 @@
         var _settings = $.extend({
             Debug: true,
             WidgetClass: 'enhanced-form',
-            ValidationNodeClass: 'form-validation-message row hidden',
+            ValidationNodeClass: 'form-validation-message hidden',
             ValidationNodeMessage: 'Please ensure all required fields are filled in.'
         }, options || {});
 
@@ -54,7 +57,10 @@
             _validation_node = $('<div/>')
                 .addClass(_settings.ValidationNodeClass);
             _validation_node.append(
-                $('<div/>').addClass('col-xs-12 text-center text-danger').html(_settings.ValidationNodeMessage).prepend($('<span/>').addClass('glyphicon glyphicon-exclamation-sign'))
+                $('<div/>').addClass('col-xs-12 text-center text-danger')
+                    .html(_settings.ValidationNodeMessage)
+                    .prepend($('<span/>')
+                        .addClass('glyphicon glyphicon-exclamation-sign'))
             );
             _node.prepend(_validation_node);
 
